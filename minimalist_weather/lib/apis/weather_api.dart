@@ -6,7 +6,7 @@ import 'package:qweather_icons/qweather_icons.dart';
 
 abstract class WeatherApi {
   static const String _urlArgsString =
-      '&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,rain,snowfall,snow_depth,weather_code,surface_pressure,wind_speed_10m&daily=sunrise,sunset,daylight_duration,sunshine_duration,uv_index_max&start_date=2024-07-15&end_date=2024-07-17';
+      '&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,rain,snowfall,snow_depth,weather_code,surface_pressure,wind_speed_10m&daily=sunrise,sunset,daylight_duration,sunshine_duration,uv_index_max,apparent_temperature_max,apparent_temperature_min,wind_speed_10m_max&start_date=2024-07-15&end_date=2024-07-17';
 
   static Future<WeatherData> getWeatherForCity({
     required Location location,
@@ -94,6 +94,11 @@ class WeatherData {
   final List<HourlyWeatherData> hourlyWeatherData;
   final List<DailyWeatherData> dailyWeatherData;
 
+  double get currentTemperature => currentHourlyWeatherData.temperature2m;
+
+  HourlyWeatherData get currentHourlyWeatherData =>
+      hourlyWeatherData[DateTime.now().hour];
+
   /// Returns an icon for a weather code
   static Widget getWeatherIcon(int weatherCode) {
     if (weatherCode >= 0 && weatherCode <= 9) {
@@ -132,6 +137,33 @@ class WeatherData {
     }
   }
 
+  /// Returns an icon for a weather code
+  static String getWeatherDescription(int weatherCode) {
+    if (weatherCode >= 0 && weatherCode <= 9) {
+      return 'Sunny';
+    } else if (weatherCode >= 10 && weatherCode <= 19) {
+      return 'Partly Cloudy';
+    } else if (weatherCode >= 20 && weatherCode <= 29) {
+      return 'Cloudy';
+    } else if (weatherCode >= 30 && weatherCode <= 39) {
+      return 'Rain';
+    } else if (weatherCode >= 40 && weatherCode <= 49) {
+      return 'Thunderstorm';
+    } else if (weatherCode >= 50 && weatherCode <= 59) {
+      return 'Snow';
+    } else if (weatherCode >= 60 && weatherCode <= 69) {
+      return 'Fog';
+    } else if (weatherCode >= 70 && weatherCode <= 79) {
+      return 'Hail';
+    } else if (weatherCode >= 80 && weatherCode <= 89) {
+      return 'Sleet';
+    } else if (weatherCode >= 90 && weatherCode <= 99) {
+      return 'Extreme Weather';
+    } else {
+      return 'Unknown Weather Condition';
+    }
+  }
+
   const WeatherData({
     required this.latitude,
     required this.longitude,
@@ -153,30 +185,6 @@ class WeatherData {
     required this.hourlyWeatherData,
     required this.dailyWeatherData,
   });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'latitude': latitude,
-      'longitude': longitude,
-      'generationtime_ms': generationtimeMs,
-      'utc_offset_seconds': utcOffsetSeconds,
-      'timezone': timezone,
-      'timezone_abbreviation': timezoneAbbreviation,
-      'elevation': elevation,
-      'time_unit': timeUnit,
-      'temperature_2m_unit': temperature2mUnit,
-      'relative_humidity_2m_unit': relativeHumidity2mUnit,
-      'apparent_temperature_unit': apparentTemperatureUnit,
-      'rain_unit': rainUnit,
-      'snowfall_unit': snowfallUnit,
-      'snow_depth_unit': snowDepthUnit,
-      'weather_code_unit': weatherCodeUnit,
-      'surface_pressure_unit': surfacePressureUnit,
-      'winds_speed_10m_unit': windSpeed10mUnit,
-      'hourly_weather_data': hourlyWeatherData.map((x) => x.toMap()).toList(),
-      'daily_weather_data': dailyWeatherData.map((x) => x.toMap()).toList(),
-    };
-  }
 
   factory WeatherData.fromMap(Map<String, dynamic> map) {
     // Parse the hourly data
@@ -211,7 +219,9 @@ class WeatherData {
           snowDepth: snowDepth[i],
           weatherCode: weatherCode[i],
           surfacePressure: surfacePressure[i],
+          surfacePressureUnit: map['hourly_units']['surface_pressure'],
           windSpeed10m: windSpeed10m[i],
+          windSpeed10mUnit: map['hourly_units']['wind_speed_10m'],
         ),
       );
     }
@@ -234,6 +244,12 @@ class WeatherData {
     final List<double> sunshineDuration =
         map['daily']['sunshine_duration'].cast<double>();
     final List<double> uvIndexMax = map['daily']['uv_index_max'].cast<double>();
+    final List<double> apparentTemperatureMin =
+        map['daily']['apparent_temperature_min'].cast<double>();
+    final List<double> apparentTemperatureMax =
+        map['daily']['apparent_temperature_max'].cast<double>();
+    final List<double> windSpeed10mMax =
+        map['daily']['wind_speed_10m_max'].cast<double>();
 
     // Units
     final String daylightDurationUnit =
@@ -251,6 +267,9 @@ class WeatherData {
           daylightDuration: daylightDuration[i],
           sunshineDuration: sunshineDuration[i],
           uvIndexMax: uvIndexMax[i],
+          apparentTemperatureMin: apparentTemperatureMin[i],
+          apparentTemperatureMax: apparentTemperatureMax[i],
+          windSpeed10mMax: windSpeed10mMax[i],
           daylightDurationUnit: daylightDurationUnit,
           sunshineDurationUnit: sunshineDurationUnit,
         ),
@@ -280,8 +299,6 @@ class WeatherData {
     );
   }
 
-  String toJson() => json.encode(toMap());
-
   factory WeatherData.fromJson(String source) =>
       WeatherData.fromMap(json.decode(source));
 }
@@ -297,7 +314,9 @@ class HourlyWeatherData {
   final double snowDepth;
   final int weatherCode;
   final double surfacePressure;
+  final String surfacePressureUnit;
   final double windSpeed10m;
+  final String windSpeed10mUnit;
 
   const HourlyWeatherData({
     required this.time,
@@ -309,26 +328,17 @@ class HourlyWeatherData {
     required this.snowDepth,
     required this.weatherCode,
     required this.surfacePressure,
+    required this.surfacePressureUnit,
     required this.windSpeed10m,
+    required this.windSpeed10mUnit,
   });
 
   Widget get weatherIcon {
     return WeatherData.getWeatherIcon(weatherCode);
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'time': time.millisecondsSinceEpoch,
-      'temperature_2m': temperature2m,
-      'relative_humidity_2m': relativeHumidity2m,
-      'apparent_temperature': apparentTemperature,
-      'rain': rain,
-      'snowfall': snowfall,
-      'snow_depth': snowDepth,
-      'weather_code': weatherCode,
-      'surface_pressure': surfacePressure,
-      'wind_speed_10m': windSpeed10m,
-    };
+  String get weatherDescription {
+    return WeatherData.getWeatherDescription(weatherCode);
   }
 
   factory HourlyWeatherData.fromMap(Map<String, dynamic> map) {
@@ -342,11 +352,11 @@ class HourlyWeatherData {
       snowDepth: map['snow_depth'].toDouble(),
       weatherCode: map['weather_code'].toInt(),
       surfacePressure: map['surface_pressure'].toDouble(),
+      surfacePressureUnit: map['surface_pressure_unit'] as String,
       windSpeed10m: map['wind_speed_10m'].toDouble(),
+      windSpeed10mUnit: map['wind_speed_10m_unit'] as String,
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory HourlyWeatherData.fromJson(String source) =>
       HourlyWeatherData.fromMap(json.decode(source));
@@ -360,6 +370,9 @@ class DailyWeatherData {
   final double daylightDuration;
   final double sunshineDuration;
   final double uvIndexMax;
+  final double apparentTemperatureMax;
+  final double apparentTemperatureMin;
+  final double windSpeed10mMax;
 
   // Units
   final String daylightDurationUnit;
@@ -374,20 +387,10 @@ class DailyWeatherData {
     required this.uvIndexMax,
     required this.daylightDurationUnit,
     required this.sunshineDurationUnit,
+    required this.apparentTemperatureMax,
+    required this.apparentTemperatureMin,
+    required this.windSpeed10mMax,
   });
-
-  Map<String, dynamic> toMap() {
-    return {
-      'date': date.millisecondsSinceEpoch,
-      'sunrise': sunrise.millisecondsSinceEpoch,
-      'sunset': sunset.millisecondsSinceEpoch,
-      'daylight_duration': daylightDuration,
-      'sunshine_duration': sunshineDuration,
-      'uv_index_max': uvIndexMax,
-      'daylight_duration_unit': daylightDurationUnit,
-      'sunshine_duration_unit': sunshineDurationUnit,
-    };
-  }
 
   factory DailyWeatherData.fromMap(Map<String, dynamic> map) {
     return DailyWeatherData(
@@ -397,12 +400,13 @@ class DailyWeatherData {
       daylightDuration: map['daylight_duration'].toDouble(),
       sunshineDuration: map['sunshine_duration'].toDouble(),
       uvIndexMax: map['uv_index_max'].toDouble(),
+      apparentTemperatureMax: map['apparent_temperature_max'].toDouble(),
+      apparentTemperatureMin: map['apparent_temperature_min'].toDouble(),
+      windSpeed10mMax: map['wind_speed_10m_max'].toDouble(),
       daylightDurationUnit: map['daylight_duration_unit'],
       sunshineDurationUnit: map['sunshine_duration_unit'],
     );
   }
-
-  String toJson() => json.encode(toMap());
 
   factory DailyWeatherData.fromJson(String source) =>
       DailyWeatherData.fromMap(json.decode(source));
