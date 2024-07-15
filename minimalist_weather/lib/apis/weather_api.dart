@@ -2,13 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:qweather_icons/qweather_icons.dart';
 
 abstract class WeatherApi {
+  static const String _urlArgsString =
+      '&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,rain,snowfall,snow_depth,weather_code,surface_pressure,wind_speed_10m&daily=sunrise,sunset,daylight_duration,sunshine_duration,uv_index_max&start_date=2024-07-15&end_date=2024-07-17';
+
   static Future<WeatherData> getWeatherForCity({
     required Location location,
   }) async {
     var uri = Uri.parse(
-        'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,rain,snowfall,snow_depth,weather_code,surface_pressure,wind_speed_10m&daily=sunrise,sunset,daylight_duration,sunshine_duration,uv_index_max&start_date=2024-07-15&end_date=2024-07-17');
+        'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}$_urlArgsString');
 
     final response = await http.get(uri);
 
@@ -37,7 +41,7 @@ abstract class WeatherApi {
     }
 
     var uri = Uri.parse(
-      'https://api.open-meteo.com/v1/forecast?latitude=${locations.map((e) => e.latitude).join(",")}&longitude=${locations.map((e) => e.longitude).join(",")}&hourly=temperature_2m,relative_humidity_2m,apparent_temperature,rain,snowfall,snow_depth,weather_code,surface_pressure,wind_speed_10m&daily=sunrise,sunset,daylight_duration,sunshine_duration,uv_index_max&start_date=2024-07-15&end_date=2024-07-17',
+      'https://api.open-meteo.com/v1/forecast?latitude=${locations.map((e) => e.latitude).join(",")}&longitude=${locations.map((e) => e.longitude).join(",")}$_urlArgsString',
     );
 
     final response = await http.get(uri);
@@ -89,6 +93,44 @@ class WeatherData {
 
   final List<HourlyWeatherData> hourlyWeatherData;
   final List<DailyWeatherData> dailyWeatherData;
+
+  /// Returns an icon for a weather code
+  static Widget getWeatherIcon(int weatherCode) {
+    if (weatherCode >= 0 && weatherCode <= 9) {
+      return Icon(QWeatherIcons.tag_sunny.iconData);
+      // return 'Clear or Sunny';
+    } else if (weatherCode >= 10 && weatherCode <= 19) {
+      return Icon(QWeatherIcons.tag_cloudy.iconData);
+      // return 'Partly Cloudy';
+    } else if (weatherCode >= 20 && weatherCode <= 29) {
+      return Icon(QWeatherIcons.tag_overcast.iconData);
+      // return 'Cloudy';
+    } else if (weatherCode >= 30 && weatherCode <= 39) {
+      return Icon(QWeatherIcons.tag_moderate_rain.iconData);
+      // return 'Rain';
+    } else if (weatherCode >= 40 && weatherCode <= 49) {
+      return Icon(QWeatherIcons.tag_thundershower.iconData);
+      // return 'Thunderstorm';
+    } else if (weatherCode >= 50 && weatherCode <= 59) {
+      return Icon(QWeatherIcons.tag_heavy_snow.iconData);
+      // return 'Snow';
+    } else if (weatherCode >= 60 && weatherCode <= 69) {
+      return Icon(QWeatherIcons.tag_foggy.iconData);
+      // return 'Fog';
+    } else if (weatherCode >= 70 && weatherCode <= 79) {
+      return Icon(QWeatherIcons.tag_hail.iconData);
+      // return 'Hail';
+    } else if (weatherCode >= 80 && weatherCode <= 89) {
+      return Icon(QWeatherIcons.tag_sleet.iconData);
+      // return 'Sleet';
+    } else if (weatherCode >= 90 && weatherCode <= 99) {
+      return Icon(QWeatherIcons.tag_disaster_risk_early_warning.iconData);
+      // return 'Extreme Weather';
+    } else {
+      return Icon(QWeatherIcons.tag_unknown.iconData);
+      // return 'Unknown Weather Condition';
+    }
+  }
 
   const WeatherData({
     required this.latitude,
@@ -269,6 +311,10 @@ class HourlyWeatherData {
     required this.surfacePressure,
     required this.windSpeed10m,
   });
+
+  Widget get weatherIcon {
+    return WeatherData.getWeatherIcon(weatherCode);
+  }
 
   Map<String, dynamic> toMap() {
     return {

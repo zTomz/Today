@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:timezone/standalone.dart' as tz;
 
 abstract class GeocodingApi {
   static Future<List<GeoLocation>> getSuggestions(String value) async {
@@ -51,6 +52,13 @@ class GeoLocation {
   final String countryCode;
   final String timezone;
   final List<String> postcodes;
+
+  tz.Location get timezoneLocation => tz.getLocation(timezone);
+
+  DateTime get timezoneTime => tz.TZDateTime.now(timezoneLocation);
+
+  String get timezoneTimeString =>
+      "${timezoneTime.hour.toString().padLeft(2, '0')}:${timezoneTime.minute.toString().padLeft(2, '0')}";
 
   GeoLocation({
     required this.id,

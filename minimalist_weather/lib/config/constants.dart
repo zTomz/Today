@@ -7,6 +7,7 @@ const double defaultBorderWidth = 0.2;
 const double defaultBorderRadius = 12;
 
 abstract class Spacing {
+  static const double small = 8;
   static const double medium = 16;
-  static const double large = 32;
+  static const double large = 28;
 }

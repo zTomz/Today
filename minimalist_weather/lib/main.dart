@@ -5,7 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minimalist_weather/pages/cities_page/cities_page.dart';
 
-void main() {
+import 'package:timezone/data/latest.dart' as tz;
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  tz.initializeTimeZones();
+
   runApp(
     const ProviderScope(
       child: MyApp(),
