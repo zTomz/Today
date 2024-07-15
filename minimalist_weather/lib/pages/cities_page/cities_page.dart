@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/pages/cities_page/provider/cities_provider.dart';
 import 'package:minimalist_weather/pages/cities_page/widgets/cities_app_bar.dart';
+import 'package:minimalist_weather/pages/cities_page/widgets/cities_list_view.dart';
 
-class CitiesPage extends ConsumerWidget {
+class CitiesPage extends StatelessWidget {
   const CitiesPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final cities = ref.watch(citiesProvider);
+  Widget build(BuildContext context) {
 
     return const Scaffold(
       appBar: CitiesAppBar(),
+      body: CitiesListView(),
     );
   }
 }

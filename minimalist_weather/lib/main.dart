@@ -29,6 +29,11 @@ class MyApp extends StatelessWidget {
             fontSize: 65,
             letterSpacing: 2,
           ),
+          displaySmall: GoogleFonts.poppins(
+            fontWeight: FontWeight.w600,
+            fontSize: 30,
+            letterSpacing: 2,
+          ),
         ),
         useMaterial3: true,
       ),
