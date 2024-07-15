@@ -2,7 +2,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minimalist_weather/apis/geocoding_api.dart';
 import 'package:minimalist_weather/apis/weather_api.dart';
 import 'package:minimalist_weather/config/constants.dart';
-import 'package:minimalist_weather/pages/cities_page/provider/city.dart';
+import 'package:minimalist_weather/provider/city.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // All cities are stored as json [GeoLocation] data

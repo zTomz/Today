@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minimalist_weather/apis/geocoding_api.dart';
 import 'package:minimalist_weather/config/constants.dart';
-import 'package:minimalist_weather/pages/cities_page/provider/cities_provider.dart';
+import 'package:minimalist_weather/provider/cities_provider.dart';
 import 'package:minimalist_weather/widgets/custom_button.dart';
 
 class NewCityDialog extends HookConsumerWidget {

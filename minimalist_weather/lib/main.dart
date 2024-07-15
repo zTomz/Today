@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:minimalist_weather/config/constants.dart';
 import 'package:minimalist_weather/pages/cities_page/cities_page.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         textTheme: GoogleFonts.poppinsTextTheme().copyWith(
           displayLarge: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
@@ -38,7 +39,6 @@ class MyApp extends StatelessWidget {
           displaySmall: GoogleFonts.poppins(
             fontWeight: FontWeight.w600,
             fontSize: 30,
-            letterSpacing: 2,
           ),
         ),
         useMaterial3: true,

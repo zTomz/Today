@@ -30,8 +30,6 @@ class CitiesAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             IconButton(
               onPressed: () async {
-                // TODO: Add a new city
-
                 await showDialog(
                   context: context,
                   builder: (context) => const NewCityDialog(),
@@ -49,5 +47,5 @@ class CitiesAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(130);
+  Size get preferredSize => const Size.fromHeight(appBarHeight);
 }
