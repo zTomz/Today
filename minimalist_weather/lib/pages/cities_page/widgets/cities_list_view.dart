@@ -14,28 +14,34 @@ class CitiesListView extends ConsumerWidget {
       AsyncData(:final value) => ListView.builder(
           itemCount: value.length,
           itemBuilder: (context, index) {
+            final city = value[index];
+
             return Container(
               padding: const EdgeInsets.symmetric(
                 horizontal: Spacing.large,
                 vertical: Spacing.medium,
               ),
               decoration: BoxDecoration(
-                border: index != value.length - 1 ? Border(
-                  bottom:  BorderSide(
-                    color: Theme.of(context).colorScheme.outline,
-                    width: defaultBorderWidth,
-                  ),
-                ) : null,
+                border: index != value.length - 1
+                    ? Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).colorScheme.outline,
+                          width: defaultBorderWidth,
+                        ),
+                      )
+                    : null,
               ),
               child: Row(
                 children: [
                   Text(
-                    value[index].location.name,
+                    city.location.name,
                     style: Theme.of(context).textTheme.displaySmall,
                   ),
                   const Spacer(),
-                  // TODO: Display the weather of the city here
-                  const Text("WEATER"),
+                  Text(
+                    "${city.weather.hourlyWeatherData[DateTime.now().hour].temperature2m} ${city.weather.temperature2mUnit}",
+                    style: Theme.of(context).textTheme.displaySmall,
+                  ),
                 ],
               ),
             );

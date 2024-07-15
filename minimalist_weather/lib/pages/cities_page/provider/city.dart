@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:minimalist_weather/apis/geocoding_api.dart';
-import 'package:open_meteo/apis/weather.dart';
+import 'package:minimalist_weather/apis/weather_api.dart';
 
 @immutable
 class City {
   final GeoLocation location;
-  final Weather weather;
+  final WeatherData weather;
 
   const City({
     required this.location,
