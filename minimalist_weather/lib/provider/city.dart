@@ -6,9 +6,11 @@ import 'package:minimalist_weather/apis/weather_api.dart';
 class City {
   final GeoLocation location;
   final WeatherData weather;
+  final String uuid;
 
   const City({
     required this.location,
     required this.weather,
+    required this.uuid,
   });
 }

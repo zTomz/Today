@@ -10,9 +10,11 @@ abstract class WeatherApi {
 
   static Future<WeatherData> getWeatherForCity({
     required Location location,
+    bool useCelcius = true,
   }) async {
     var uri = Uri.parse(
-        'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}$_urlArgsString');
+      'https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}$_urlArgsString${!useCelcius ? '&temperature_unit=fahrenheit' : ''}',
+    );
 
     final response = await http.get(uri);
 
@@ -27,6 +29,7 @@ abstract class WeatherApi {
 
   static Future<List<WeatherData>> getWeatherForCities({
     required List<Location> locations,
+    bool useCelcius = true,
   }) async {
     if (locations.isEmpty) {
       return [];
@@ -36,12 +39,13 @@ abstract class WeatherApi {
       return [
         await getWeatherForCity(
           location: locations.first,
+          useCelcius: useCelcius,
         ),
       ];
     }
 
     var uri = Uri.parse(
-      'https://api.open-meteo.com/v1/forecast?latitude=${locations.map((e) => e.latitude).join(",")}&longitude=${locations.map((e) => e.longitude).join(",")}$_urlArgsString',
+      'https://api.open-meteo.com/v1/forecast?latitude=${locations.map((e) => e.latitude).join(",")}&longitude=${locations.map((e) => e.longitude).join(",")}$_urlArgsString${!useCelcius ? '&temperature_unit=fahrenheit' : ''}',
     );
 
     final response = await http.get(uri);

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/provider/cities_provider.dart';
 
-class DetailsAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final bool useCelcius;
-  final void Function(bool useCelcius) toggleCelcius;
-
+class DetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const DetailsAppBar({
     super.key,
-    required this.useCelcius,
-    required this.toggleCelcius,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final useCelcius = ref.watch(useCelciusProvider);
+
     return Container(
       alignment: Alignment.center,
       height: appBarHeight + MediaQuery.paddingOf(context).top,
@@ -41,8 +40,8 @@ class DetailsAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             const Spacer(),
             IconButton(
-              onPressed: () {
-                toggleCelcius(true);
+              onPressed: () async {
+                ref.read(citiesProvider.notifier).toggleUseCelcius(true);
               },
               icon: Text(
                 "°C",
@@ -54,8 +53,8 @@ class DetailsAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
             IconButton(
-              onPressed: () {
-                toggleCelcius(false);
+              onPressed: () async {
+                ref.read(citiesProvider.notifier).toggleUseCelcius(false);
               },
               icon: Text(
                 "°F",

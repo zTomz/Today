@@ -18,13 +18,13 @@ class CitiesListView extends ConsumerWidget {
             final city = value[index];
 
             return GestureDetector(
-              onTap: ( ){
+              onTap: () {
                 // TODO: Add animation
 
                 Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) => DetailPage(
-                      city: city,
+                      cityUuid: city.uuid,
                     ),
                   ),
                 );
@@ -48,7 +48,10 @@ class CitiesListView extends ConsumerWidget {
                       children: [
                         Text(
                           "${city.location.countryCode}, ${city.location.latitude}, ${city.location.longitude}",
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
                                 color: Theme.of(context).colorScheme.outline,
                               ),
                         ),
@@ -64,7 +67,10 @@ class CitiesListView extends ConsumerWidget {
                       children: [
                         Text(
                           "${city.location.timezoneTimeString} Uhr",
-                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
                                 color: Theme.of(context).colorScheme.outline,
                               ),
                         ),
@@ -94,11 +100,6 @@ class CitiesListView extends ConsumerWidget {
               ),
             );
           },
-        ),
-      AsyncError(:final error) => Center(
-          child: Text(
-            error.toString(),
-          ),
         ),
       _ => const Center(
           child: CircularProgressIndicator(),

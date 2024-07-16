@@ -4,6 +4,7 @@ import 'package:minimalist_weather/apis/weather_api.dart';
 import 'package:minimalist_weather/config/constants.dart';
 import 'package:minimalist_weather/provider/city.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 // All cities are stored as json [GeoLocation] data
 
@@ -11,6 +12,13 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
   @override
   Future<List<City>> build() async {
     final prefsInstance = await SharedPreferences.getInstance();
+
+    // Get `useCelcius` value
+    // ignore: no_leading_underscores_for_local_identifiers
+    final useCelcius = prefsInstance.getBool(useCelciusKey) ?? true;
+    ref.read(useCelciusProvider.notifier).state = useCelcius;
+    logger.i("Loaded useCelcius: $useCelcius");
+
     final List<String> cityNames =
         prefsInstance.getStringList(citiesSharedPrefsKey) ?? [];
     final List<GeoLocation> geoLocations =
@@ -19,9 +27,12 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
       locations: geoLocations
           .map(
             (location) => Location(
-                latitude: location.latitude, longitude: location.longitude),
+              latitude: location.latitude,
+              longitude: location.longitude,
+            ),
           )
           .toList(),
+      useCelcius: useCelcius,
     );
     List<City> cities = [];
 
@@ -30,6 +41,7 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
         City(
           location: geoLocations[i],
           weather: weatherData[i],
+          uuid: const Uuid().v4(),
         ),
       );
     }
@@ -61,14 +73,64 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
           longitude: location.longitude,
         ),
       ),
+      uuid: const Uuid().v4(),
     );
     state = AsyncValue.data([
       ...cities,
       newCity,
     ]);
   }
+
+  /// Toggle `useCelcius` and update the cities with the new weather data
+  Future<void> toggleUseCelcius(bool useCelcius) async {
+    // If `useCelcius` hasn't changed, ignore the update
+    final bool useCelciusProviderValue =
+        ref.read(useCelciusProvider.notifier).state;
+    if (useCelcius == useCelciusProviderValue) {
+      return;
+    }
+
+    // Update the variable
+    ref.read(useCelciusProvider.notifier).state = useCelcius;
+
+    // Update the storage
+    final prefsInstance = await SharedPreferences.getInstance();
+    await prefsInstance.setBool(useCelciusKey, useCelcius);
+
+    // Load the new weather data
+    final oldUuids = (state.value ?? []).map((e) => e.uuid).toList();
+
+    final locations = (state.value ?? []).map((e) => e.location).toList();
+    final weatherData = await WeatherApi.getWeatherForCities(
+      locations: locations
+          .map(
+            (location) => Location(
+              latitude: location.latitude,
+              longitude: location.longitude,
+            ),
+          )
+          .toList(),
+      useCelcius: useCelcius,
+    );
+
+    // Update the app state
+    List<City> cities = [];
+    for (int i = 0; i < locations.length; i++) {
+      cities.add(
+        City(
+          location: locations[i],
+          weather: weatherData[i],
+          uuid: oldUuids[i],
+        ),
+      );
+    }
+
+    state = AsyncValue.data(cities);
+  }
 }
 
 final citiesProvider = AsyncNotifierProvider<CitiesNotifier, List<City>>(
   () => CitiesNotifier(),
 );
+
+final useCelciusProvider = StateProvider<bool>((ref) => true);
