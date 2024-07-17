@@ -1,4 +1,5 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:minimalist_weather/apis/api_exeptions.dart';
 import 'package:minimalist_weather/apis/geocoding_api.dart';
 import 'package:minimalist_weather/apis/weather_api.dart';
 import 'package:minimalist_weather/config/constants.dart';
@@ -14,15 +15,19 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
     final prefsInstance = await SharedPreferences.getInstance();
 
     // Get `useCelcius` value
-    // ignore: no_leading_underscores_for_local_identifiers
     final useCelcius = prefsInstance.getBool(useCelciusKey) ?? true;
     ref.read(useCelciusProvider.notifier).state = useCelcius;
     logger.i("Loaded useCelcius: $useCelcius");
 
-    final List<String> cityNames =
+    // Get geo locations
+    final List<String> loadedGeoLocations =
         prefsInstance.getStringList(citiesSharedPrefsKey) ?? [];
-    final List<GeoLocation> geoLocations =
-        cityNames.map((city) => GeoLocation.fromJson(city)).toList();
+    final List<GeoLocation> geoLocations = loadedGeoLocations
+        .map((location) => GeoLocation.fromJson(location))
+        .toList();
+    logger.i("Loaded geo locations");
+
+    // Load the weather data
     final List<WeatherData> weatherData = await WeatherApi.getWeatherForCities(
       locations: geoLocations
           .map(
@@ -34,6 +39,8 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
           .toList(),
       useCelcius: useCelcius,
     );
+    logger.i("Got weather data");
+
     List<City> cities = [];
 
     for (int i = 0; i < geoLocations.length; i++) {
@@ -53,7 +60,6 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
   Future<void> addCity(GeoLocation location) async {
     final cities = state.value ?? [];
     final prefsInstance = await SharedPreferences.getInstance();
-    await prefsInstance.clear();
 
     // Update the shared preferences
     await prefsInstance.setStringList(
@@ -63,29 +69,42 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
         location.toJson(),
       ],
     );
+    logger.i("Saved new city to shared preferences");
+
     // Update the app state
-    // TODO: Handle errors
-    final newCity = City(
-      location: location,
-      weather: await WeatherApi.getWeatherForCity(
+    try {
+      final weatherData = await WeatherApi.getWeatherForCity(
         location: Location(
           latitude: location.latitude,
           longitude: location.longitude,
         ),
-      ),
-      uuid: const Uuid().v4(),
-    );
-    state = AsyncValue.data([
-      ...cities,
-      newCity,
-    ]);
+        useCelcius: ref.read(useCelciusProvider),
+      );
+      // TODO: Handle errors
+      final newCity = City(
+        location: location,
+        weather: weatherData,
+        uuid: const Uuid().v4(),
+      );
+
+      state = AsyncValue.data([
+        ...cities,
+        newCity,
+      ]);
+    } on ApiExeption catch (apiExeption) {
+      logger.e("Got ApiExeption: ${apiExeption.toString()}");
+
+      state = AsyncValue.error(apiExeption, StackTrace.current);
+    } on UnknownApiExeption catch (unknownApiExeption) {
+      logger.e("Got UnknownApiExeption: ${unknownApiExeption.toString()}");
+      state = AsyncValue.error(unknownApiExeption, StackTrace.current);
+    }
   }
 
   /// Toggle `useCelcius` and update the cities with the new weather data
   Future<void> toggleUseCelcius(bool useCelcius) async {
     // If `useCelcius` hasn't changed, ignore the update
-    final bool useCelciusProviderValue =
-        ref.read(useCelciusProvider.notifier).state;
+    final bool useCelciusProviderValue = ref.read(useCelciusProvider);
     if (useCelcius == useCelciusProviderValue) {
       return;
     }
@@ -97,35 +116,47 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
     final prefsInstance = await SharedPreferences.getInstance();
     await prefsInstance.setBool(useCelciusKey, useCelcius);
 
+    logger.i("Updated useCelcius value");
+
     // Load the new weather data
-    final oldUuids = (state.value ?? []).map((e) => e.uuid).toList();
+    try {
+      final oldUuids = (state.value ?? []).map((e) => e.uuid).toList();
 
-    final locations = (state.value ?? []).map((e) => e.location).toList();
-    final weatherData = await WeatherApi.getWeatherForCities(
-      locations: locations
-          .map(
-            (location) => Location(
-              latitude: location.latitude,
-              longitude: location.longitude,
-            ),
-          )
-          .toList(),
-      useCelcius: useCelcius,
-    );
-
-    // Update the app state
-    List<City> cities = [];
-    for (int i = 0; i < locations.length; i++) {
-      cities.add(
-        City(
-          location: locations[i],
-          weather: weatherData[i],
-          uuid: oldUuids[i],
-        ),
+      final locations = (state.value ?? []).map((e) => e.location).toList();
+      final weatherData = await WeatherApi.getWeatherForCities(
+        locations: locations
+            .map(
+              (location) => Location(
+                latitude: location.latitude,
+                longitude: location.longitude,
+              ),
+            )
+            .toList(),
+        useCelcius: useCelcius,
       );
-    }
+      logger.i("Loaded new weather data for the cities");
 
-    state = AsyncValue.data(cities);
+      // Update the app state
+      List<City> cities = [];
+      for (int i = 0; i < locations.length; i++) {
+        cities.add(
+          City(
+            location: locations[i],
+            weather: weatherData[i],
+            uuid: oldUuids[i],
+          ),
+        );
+      }
+
+      state = AsyncValue.data(cities);
+    } on ApiExeption catch (apiExeption) {
+      logger.e("Got ApiExeption: ${apiExeption.toString()}");
+
+      state = AsyncValue.error(apiExeption, StackTrace.current);
+    } on UnknownApiExeption catch (unknownApiExeption) {
+      logger.e("Got UnknownApiExeption: ${unknownApiExeption.toString()}");
+      state = AsyncValue.error(unknownApiExeption, StackTrace.current);
+    }
   }
 }
 

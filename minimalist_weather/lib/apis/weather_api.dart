@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:minimalist_weather/apis/api_exeptions.dart';
 import 'package:qweather_icons/qweather_icons.dart';
 
 abstract class WeatherApi {
@@ -21,9 +22,12 @@ abstract class WeatherApi {
     int statusCode = response.statusCode;
     if (statusCode >= 200 && statusCode < 300) {
       return WeatherData.fromJson(response.body);
+    } else if (response.statusCode == 400) {
+      final reason = jsonDecode(response.body)["reason"];
+
+      throw ApiExeption(reason);
     } else {
-      // TODO: Better error's
-      throw Exception('Failed to load weather data');
+      throw UnknownApiExeption(response.statusCode);
     }
   }
 

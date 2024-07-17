@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:minimalist_weather/apis/api_exeptions.dart';
 import 'package:timezone/standalone.dart' as tz;
 
 abstract class GeocodingApi {
@@ -15,28 +16,12 @@ abstract class GeocodingApi {
       return ((json['results'] as List<dynamic>?) ?? [])
           .map((res) => GeoLocation.fromMap(res as Map<String, dynamic>))
           .toList();
+    } else if (response.statusCode == 400) {
+      final reason = jsonDecode(response.body)["reason"];
+
+      throw ApiExeption(reason);
     } else {
-      throw Exception('Failed to load suggestions');
-    }
-  }
-
-  static Future<GeoLocation> getCity(String cityName) async {
-    final uri = Uri.parse(
-      "https://geocoding-api.open-meteo.com/v1/search?name=$cityName&count=1&language=en&format=json",
-    );
-
-    final response = await http.get(uri);
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> json = jsonDecode(response.body);
-      final results = (json['results'] as List<dynamic>?) ?? [];
-      if (results.isEmpty) {
-        throw Exception('No city with name $cityName found.');
-      }
-
-      return GeoLocation.fromMap(results.first as dynamic);
-    } else {
-      throw Exception('Failed to load suggestions');
+      throw UnknownApiExeption(response.statusCode);
     }
   }
 }
@@ -110,3 +95,4 @@ class GeoLocation {
   factory GeoLocation.fromJson(String source) =>
       GeoLocation.fromMap(json.decode(source));
 }
+

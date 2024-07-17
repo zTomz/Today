@@ -1,3 +1,6 @@
+// TODO: Write README
+// TODO: Write intro animation
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
