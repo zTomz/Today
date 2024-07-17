@@ -80,7 +80,6 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
         ),
         useCelcius: ref.read(useCelciusProvider),
       );
-      // TODO: Handle errors
       final newCity = City(
         location: location,
         weather: weatherData,
