@@ -8,11 +8,13 @@ import 'package:minimalist_weather/config/constants.dart';
 import 'package:minimalist_weather/pages/cities_page/cities_page.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
+import 'package:visibility_detector/visibility_detector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   tz.initializeTimeZones();
+  VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
   runApp(
     const ProviderScope(

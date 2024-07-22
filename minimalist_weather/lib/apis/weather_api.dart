@@ -49,7 +49,7 @@ abstract class WeatherApi {
       ];
     }
 
-    var uri = Uri.parse(
+    final uri = Uri.parse(
       'https://api.open-meteo.com/v1/forecast?latitude=${locations.map((e) => e.latitude).join(",")}&longitude=${locations.map((e) => e.longitude).join(",")}$_urlArgsString${!useCelcius ? '&temperature_unit=fahrenheit' : ''}',
     );
 
@@ -60,9 +60,12 @@ abstract class WeatherApi {
       return (jsonDecode(response.body) as List)
           .map((element) => WeatherData.fromMap(element))
           .toList();
+    } else if (response.statusCode == 400) {
+      final reason = jsonDecode(response.body)["reason"];
+
+      throw ApiExeption(reason);
     } else {
-      // TODO: Better error's
-      throw Exception('Failed to load weather data');
+      throw UnknownApiExeption(response.statusCode);
     }
   }
 }

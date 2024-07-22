@@ -100,6 +100,29 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
     }
   }
 
+  /// Remove a city from the list
+  Future<void> removeCity(String uuid) async {
+    // Get all cities
+    final cities = state.value ?? [];
+
+    // Remove from storage
+    final prefsInstance = await SharedPreferences.getInstance();
+    await prefsInstance.setStringList(
+      citiesSharedPrefsKey,
+      cities
+          .where((city) => city.uuid != uuid)
+          .map((city) => city.location.toJson())
+          .toList(),
+    );
+
+    logger.i("Removed city from shared preferences");
+
+    // Update the app state
+    state = AsyncValue.data(
+      cities.where((city) => city.uuid != uuid).map((city) => city).toList(),
+    );
+  }
+
   /// Toggle `useCelcius` and update the cities with the new weather data
   Future<void> toggleUseCelcius(bool useCelcius) async {
     // If `useCelcius` hasn't changed, ignore the update

@@ -86,7 +86,7 @@ class NewCityDialog extends HookConsumerWidget {
                 onPressed: () async {
                   // Check the controller
                   if (geoLocation.value == null) {
-                    // TODO: Show a snackbar, that no city is selected
+                    error.value = "No city selected";
                     return;
                   }
 
