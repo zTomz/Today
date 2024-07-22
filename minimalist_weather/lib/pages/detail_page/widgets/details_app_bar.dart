@@ -14,7 +14,7 @@ class DetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
 
     return Container(
       alignment: Alignment.center,
-      height: appBarHeight + MediaQuery.paddingOf(context).top,
+      height: defaultAppBarHeight + MediaQuery.paddingOf(context).top,
       padding: const EdgeInsets.symmetric(
         horizontal: Spacing.large,
       ),
@@ -72,5 +72,5 @@ class DetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(appBarHeight);
+  Size get preferredSize => const Size.fromHeight(defaultAppBarHeight);
 }

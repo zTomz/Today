@@ -9,7 +9,21 @@ const String useCelciusKey = 'use_celsius';
 
 const double defaultBorderWidth = 0.2;
 const double defaultBorderRadius = 12;
-const double appBarHeight = 130;
+const double defaultAppBarHeight = 130;
+
+/// A class, that contains all the animation duration constants used in the app
+abstract class AnimationDurations {
+  /// The duration for the animation
+  static const Duration animation = Duration(milliseconds: 100);
+
+  /// The delay, when multiple animations are played at the same time
+  static const Duration delay = Duration(milliseconds: 200);
+
+  /// Return the calculated delay for the animation, based on the provided index
+  static Duration getDelayDuration(int index) {
+    return delay * index;
+  }
+}
 
 abstract class Spacing {
   static const double small = 8;
