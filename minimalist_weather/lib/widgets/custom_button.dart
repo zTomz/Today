@@ -4,27 +4,30 @@ import 'package:minimalist_weather/config/constants.dart';
 class CustomButton extends StatelessWidget {
   final _CustomButtonVariant _variant;
 
-  final String text;
+  final Widget label;
+  final Icon? icon;
   final void Function() onPressed;
 
   const CustomButton({
     super.key,
-    required this.text,
+    required this.label,
+    this.icon,
     required this.onPressed,
   }) : _variant = _CustomButtonVariant.filled;
 
   const CustomButton.outlined({
     super.key,
-    required this.text,
+    required this.label,
+    this.icon,
     required this.onPressed,
   }) : _variant = _CustomButtonVariant.outlined;
 
   @override
   Widget build(BuildContext context) {
-    return FilledButton(
+    return FilledButton.icon(
       onPressed: onPressed,
       style: FilledButton.styleFrom(
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.symmetric(horizontal: Spacing.small),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(defaultBorderRadius),
@@ -43,7 +46,8 @@ class CustomButton extends StatelessWidget {
               )
             : null,
       ),
-      child: Text(text),
+      label: label,
+      icon: icon,
     );
   }
 }

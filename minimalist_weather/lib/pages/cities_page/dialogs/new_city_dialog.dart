@@ -72,7 +72,7 @@ class NewCityDialog extends HookConsumerWidget {
           children: [
             Expanded(
               child: CustomButton.outlined(
-                text: "Close",
+                label: const Text("Close"),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -82,7 +82,7 @@ class NewCityDialog extends HookConsumerWidget {
             Expanded(
               flex: 2,
               child: CustomButton(
-                text: "Add",
+                label: const Text("Add"),
                 onPressed: () async {
                   // Check the controller
                   if (geoLocation.value == null) {
