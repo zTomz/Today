@@ -22,31 +22,38 @@ class DetailPage extends ConsumerWidget {
         );
 
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          const BackgroundBlob(),
-          Column(
-            children: [
-              const DetailsAppBar(),
-              Expanded(
-                child: switch (asyncCity) {
-                  AsyncData(:final value) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        BigWeatherSection(city: value),
-                        DailyDetailSection(city: value),
-                        HourlyForecastSection(city: value),
-                      ],
-                    ),
-                  _ => const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                },
-              ),
-            ],
+      body: asyncCity.when(
+        data: (city) => Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            BackgroundBlob(
+              color: city.weather.currentHourlyWeatherData.weatherColor,
+            ),
+            Column(
+              children: [
+                const DetailsAppBar(),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      BigWeatherSection(city: city),
+                      DailyDetailSection(city: city),
+                      HourlyForecastSection(city: city),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        error: (_, __) => const Center(
+          child: Text(
+            "Failed to load weather data",
           ),
-        ],
+        ),
+        loading: () => const Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

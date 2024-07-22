@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:minimalist_weather/apis/api_exeptions.dart';
+import 'package:minimalist_weather/config/constants.dart';
 import 'package:qweather_icons/qweather_icons.dart';
 
 abstract class WeatherApi {
@@ -106,6 +107,44 @@ class WeatherData {
 
   HourlyWeatherData get currentHourlyWeatherData =>
       hourlyWeatherData[DateTime.now().hour];
+
+  /// Returns a color for a weather code
+  static Color getWeatherColor(int weatherCode) {
+    if (weatherCode >= 0 && weatherCode <= 9) {
+      return primaryColor;
+      // return 'Clear or Sunny';
+    } else if (weatherCode >= 10 && weatherCode <= 19) {
+      return Colors.lightBlue[200]!;
+      // return 'Partly Cloudy';
+    } else if (weatherCode >= 20 && weatherCode <= 29) {
+      return Colors.blue;
+      // return 'Cloudy';
+    } else if (weatherCode >= 30 && weatherCode <= 39) {
+      return Colors.blue[700]!;
+      // return 'Rain';
+    } else if (weatherCode >= 40 && weatherCode <= 49) {
+      return Colors.indigo[700]!;
+      // return 'Thunderstorm';
+    } else if (weatherCode >= 50 && weatherCode <= 59) {
+      return Colors.lightBlue[200]!;
+      // return 'Snow';
+    } else if (weatherCode >= 60 && weatherCode <= 69) {
+      return Colors.grey;
+      // return 'Fog';
+    } else if (weatherCode >= 70 && weatherCode <= 79) {
+      return Colors.grey[800]!;
+      // return 'Hail';
+    } else if (weatherCode >= 80 && weatherCode <= 89) {
+      return Colors.lightBlue[600]!;
+      // return 'Sleet';
+    } else if (weatherCode >= 90 && weatherCode <= 99) {
+      return Colors.red[400]!;
+      // return 'Extreme Weather';
+    } else {
+      return primaryColor;
+      // return 'Unknown Weather Condition';
+    }
+  }
 
   /// Returns an icon for a weather code
   static Widget getWeatherIcon(int weatherCode) {
@@ -340,6 +379,10 @@ class HourlyWeatherData {
     required this.windSpeed10m,
     required this.windSpeed10mUnit,
   });
+
+  Color get weatherColor {
+    return WeatherData.getWeatherColor(weatherCode);
+  }
 
   Widget get weatherIcon {
     return WeatherData.getWeatherIcon(weatherCode);

@@ -1,15 +1,20 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/config/constants.dart';
 
 class BackgroundBlob extends StatelessWidget {
-  const BackgroundBlob({super.key});
+  /// The color of the background blob
+  final Color color;
+
+  const BackgroundBlob({
+    super.key,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.sizeOf(context);
-    
+
     return Positioned(
       top: -screenSize.width * 0.9,
       left: -screenSize.width / 2,
@@ -21,9 +26,9 @@ class BackgroundBlob extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: RadialGradient(
               colors: [
-                primaryColor,
-                primaryColor.withOpacity(0.85),
-                primaryColor.withOpacity(0.7),
+                color,
+                color.withOpacity(0.85),
+                color.withOpacity(0.7),
                 Theme.of(context).colorScheme.surface,
               ],
               stops: const [
