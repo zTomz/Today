@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:minimalist_weather/config/constants.dart';
 import 'package:minimalist_weather/pages/detail_page/widgets/background_blob.dart';
 import 'package:minimalist_weather/pages/detail_page/widgets/big_weather_section.dart';
 import 'package:minimalist_weather/pages/detail_page/widgets/daily_detail_section.dart';
@@ -7,7 +9,7 @@ import 'package:minimalist_weather/pages/detail_page/widgets/details_app_bar.dar
 import 'package:minimalist_weather/pages/detail_page/widgets/hourly_forecast_section.dart';
 import 'package:minimalist_weather/provider/cities_provider.dart';
 
-class DetailPage extends ConsumerWidget {
+class DetailPage extends HookConsumerWidget {
   final String cityUuid;
 
   const DetailPage({
@@ -20,6 +22,12 @@ class DetailPage extends ConsumerWidget {
     final asyncCity = ref.watch(citiesProvider).whenData(
           (cities) => cities.firstWhere((city) => city.uuid == cityUuid),
         );
+    final fadeInAnimation = useAnimationController(
+      duration:AnimationDurations.animationLong,
+      lowerBound: 0.0,
+      upperBound: 1.0,
+      initialValue: 0.0,
+    )..forward();
 
     return Scaffold(
       body: asyncCity.when(
@@ -29,20 +37,23 @@ class DetailPage extends ConsumerWidget {
             BackgroundBlob(
               color: city.weather.currentHourlyWeatherData.weatherColor,
             ),
-            Column(
-              children: [
-                const DetailsAppBar(),
-                Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      BigWeatherSection(city: city),
-                      DailyDetailSection(city: city),
-                      HourlyForecastSection(city: city),
-                    ],
+            FadeTransition(
+              opacity: fadeInAnimation,
+              child: Column(
+                children: [
+                  const DetailsAppBar(),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BigWeatherSection(city: city),
+                        DailyDetailSection(city: city),
+                        HourlyForecastSection(city: city),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),

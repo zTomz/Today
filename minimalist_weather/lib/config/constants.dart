@@ -16,6 +16,9 @@ abstract class AnimationDurations {
   /// The duration for the animation
   static const Duration animation = Duration(milliseconds: 100);
 
+  /// The duration for long animation's. Used in fade in
+  static const Duration animationLong = Duration(milliseconds: 1000);
+
   /// The delay, when multiple animations are played at the same time
   static const Duration delay = Duration(milliseconds: 200);
 
