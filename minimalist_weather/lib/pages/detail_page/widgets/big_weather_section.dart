@@ -39,69 +39,80 @@ class BigWeatherSection extends StatelessWidget {
           ),
           SizedBox(
             height: 170,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "${city.weather.currentTemperature.toInt()}",
-                  style: const TextStyle(
-                    fontSize: 170,
-                    fontWeight: FontWeight.w700,
-                    height: 1,
-                  ),
-                ),
-                const SizedBox(width: Spacing.medium),
-                Padding(
-                  padding: const EdgeInsets.only(top: Spacing.medium),
-                  child: IconTheme(
-                    data: IconThemeData(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                    child: city.weather.hourlyWeatherData[DateTime.now().hour]
-                        .weatherIcon,
-                  ),
-                ),
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+            child: Hero(
+              tag: "weather_${city.uuid}",
+              child: Material(
+                type: MaterialType.transparency,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: Spacing.large * 1.2),
                     Text(
-                      city.weather.hourlyWeatherData[DateTime.now().hour]
-                          .weatherDescription
-                          .toLowerCase(),
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
-                    ),
-                    const Spacer(),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          TextSpan(
-                            text: "feels like ",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(
-                                  color: Theme.of(context).colorScheme.outline,
-                                ),
-                          ),
-                          TextSpan(
-                            text:
-                                "${city.weather.hourlyWeatherData[DateTime.now().hour].apparentTemperature.toInt()}°",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(fontWeight: FontWeight.w600),
-                          ),
-                        ],
+                      "${city.weather.currentTemperature.toInt()}",
+                      style: TextStyle(
+                        fontSize: 160,
+                        fontWeight: FontWeight.w600,
+                        height: 1,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
-                    const SizedBox(height: Spacing.medium * 1.2),
+                    const SizedBox(width: Spacing.medium),
+                    Padding(
+                      padding: const EdgeInsets.only(top: Spacing.medium),
+                      child: IconTheme(
+                        data: IconThemeData(
+                          color: Theme.of(context).colorScheme.outline,
+                        ),
+                        child: city.weather
+                            .hourlyWeatherData[DateTime.now().hour].weatherIcon,
+                      ),
+                    ),
+                    const Spacer(),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        const SizedBox(height: Spacing.large * 1.2),
+                        Text(
+                          city.weather.currentHourlyWeatherData
+                              .weatherDescription
+                              .toLowerCase(),
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyMedium!
+                              .copyWith(
+                                color: Theme.of(context).colorScheme.outline,
+                              ),
+                        ),
+                        const Spacer(),
+                        RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "feels like ",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                      color:
+                                          Theme.of(context).colorScheme.outline,
+                                    ),
+                              ),
+                              TextSpan(
+                                text:
+                                    "${city.weather.hourlyWeatherData[DateTime.now().hour].apparentTemperature.toInt()}°",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(fontWeight: FontWeight.w600),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: Spacing.medium * 2),
+                      ],
+                    ),
                   ],
                 ),
-              ],
+              ),
             ),
           )
         ],

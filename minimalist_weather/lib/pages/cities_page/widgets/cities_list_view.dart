@@ -23,7 +23,7 @@ class CitiesListView extends HookConsumerWidget {
               height: 50,
               child: CustomButton.outlined(
                 label: Text(
-                  "Add a new city",
+                  "Add your first city",
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 icon: const Icon(Icons.add_rounded),

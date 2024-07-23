@@ -97,22 +97,30 @@ class CityListTile extends HookConsumerWidget {
                           color: Theme.of(context).colorScheme.outline,
                         ),
                   ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        "${city.weather.hourlyWeatherData[DateTime.now().hour].temperature2m}°",
-                        style: Theme.of(context).textTheme.displaySmall,
+                  Hero(
+                    tag: "weather_${city.uuid}",
+                    child: Material(
+                      type: MaterialType.transparency,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "${city.weather.currentTemperature.toInt()}°",
+                            style: Theme.of(context).textTheme.displaySmall,
+                          ),
+                          const SizedBox(width: Spacing.small),
+                          IconTheme(
+                            data: IconThemeData(
+                              color: Theme.of(context).colorScheme.outline,
+                            ),
+                            child: city
+                                .weather
+                                .hourlyWeatherData[DateTime.now().hour]
+                                .weatherIcon,
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: Spacing.small),
-                      IconTheme(
-                        data: IconThemeData(
-                          color: Theme.of(context).colorScheme.outline,
-                        ),
-                        child: city.weather
-                            .hourlyWeatherData[DateTime.now().hour].weatherIcon,
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
