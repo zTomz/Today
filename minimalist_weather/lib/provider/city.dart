@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/core/apis/geocoding_api.dart';
-import 'package:minimalist_weather/core/apis/weather_api.dart';
+import 'package:today/core/apis/geocoding_api.dart';
+import 'package:today/core/apis/weather_api.dart';
 
 @immutable
 class City {

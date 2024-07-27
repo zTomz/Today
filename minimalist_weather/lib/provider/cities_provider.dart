@@ -1,10 +1,10 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/core/exeptions/api_exeptions.dart';
-import 'package:minimalist_weather/core/apis/geocoding_api.dart';
-import 'package:minimalist_weather/core/apis/weather_api.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
-import 'package:minimalist_weather/core/exeptions/cities_provider_exeptions.dart';
-import 'package:minimalist_weather/provider/city.dart';
+import 'package:today/core/exeptions/api_exeptions.dart';
+import 'package:today/core/apis/geocoding_api.dart';
+import 'package:today/core/apis/weather_api.dart';
+import 'package:today/core/config/constants.dart';
+import 'package:today/core/exeptions/cities_provider_exeptions.dart';
+import 'package:today/provider/city.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -61,10 +61,14 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
   Future<void> addCity(GeoLocation location) async {
     final cities = state.value ?? [];
 
-    if (cities.any((element) => element.location.latitude == location.latitude && element.location.longitude == location.longitude)) {
-      logger.e("The city ${location.name}, ${location.countryCode} already exists");
+    if (cities.any((element) =>
+        element.location.latitude == location.latitude &&
+        element.location.longitude == location.longitude)) {
+      logger.e(
+          "The city ${location.name}, ${location.countryCode} already exists");
       throw CityAlreadyExistsExeption(
-        message: "The city ${location.name}, ${location.countryCode} already exists",
+        message:
+            "The city ${location.name}, ${location.countryCode} already exists",
       );
     }
 

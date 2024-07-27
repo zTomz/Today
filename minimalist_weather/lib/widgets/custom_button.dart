@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:today/core/config/constants.dart';
 
 class CustomButton extends StatelessWidget {
   final _CustomButtonVariant _variant;

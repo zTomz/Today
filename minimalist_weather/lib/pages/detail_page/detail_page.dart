@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/widgets/background_blob.dart';
-import 'package:minimalist_weather/pages/detail_page/widgets/big_weather_section.dart';
-import 'package:minimalist_weather/pages/detail_page/widgets/daily_detail_section.dart';
-import 'package:minimalist_weather/pages/detail_page/widgets/details_app_bar.dart';
-import 'package:minimalist_weather/pages/detail_page/widgets/hourly_forecast_section.dart';
-import 'package:minimalist_weather/provider/cities_provider.dart';
+import 'package:today/widgets/background_blob.dart';
+import 'package:today/pages/detail_page/widgets/big_weather_section.dart';
+import 'package:today/pages/detail_page/widgets/daily_detail_section.dart';
+import 'package:today/pages/detail_page/widgets/details_app_bar.dart';
+import 'package:today/pages/detail_page/widgets/hourly_forecast_section.dart';
+import 'package:today/provider/cities_provider.dart';
 
 class DetailPage extends HookConsumerWidget {
   final String cityUuid;

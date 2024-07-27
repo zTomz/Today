@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
-import 'package:minimalist_weather/core/services/vibration_service.dart';
-import 'package:minimalist_weather/pages/cities_page/cities_page.dart';
+import 'package:today/core/config/constants.dart';
+import 'package:today/core/services/vibration_service.dart';
+import 'package:today/pages/cities_page/cities_page.dart';
 
 class IntroAnimationPage extends StatefulWidget {
   const IntroAnimationPage({super.key});

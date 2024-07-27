@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
-import 'package:minimalist_weather/provider/city.dart';
+import 'package:today/core/config/constants.dart';
+import 'package:today/provider/city.dart';
 
 class HourlyForecastSection extends StatelessWidget {
   final City city;

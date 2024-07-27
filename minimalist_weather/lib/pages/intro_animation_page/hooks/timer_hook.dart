@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:today/core/config/constants.dart';
 
 /// Returns a periodic timer. With the given duration and callback.
 Timer useTimer({

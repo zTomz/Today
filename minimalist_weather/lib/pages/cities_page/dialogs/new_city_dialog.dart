@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/core/apis/geocoding_api.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
-import 'package:minimalist_weather/core/exeptions/cities_provider_exeptions.dart';
-import 'package:minimalist_weather/core/services/vibration_service.dart';
-import 'package:minimalist_weather/provider/cities_provider.dart';
-import 'package:minimalist_weather/widgets/custom_button.dart';
+import 'package:today/core/apis/geocoding_api.dart';
+import 'package:today/core/config/constants.dart';
+import 'package:today/core/exeptions/cities_provider_exeptions.dart';
+import 'package:today/core/services/vibration_service.dart';
+import 'package:today/provider/cities_provider.dart';
+import 'package:today/widgets/custom_button.dart';
 
 class NewCityDialog extends HookConsumerWidget {
   const NewCityDialog({super.key});

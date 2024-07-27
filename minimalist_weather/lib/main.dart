@@ -4,9 +4,9 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
-import 'package:minimalist_weather/core/services/vibration_service.dart';
-import 'package:minimalist_weather/pages/intro_animation_page/intro_animation_page.dart';
+import 'package:today/core/config/constants.dart';
+import 'package:today/core/services/vibration_service.dart';
+import 'package:today/pages/intro_animation_page/intro_animation_page.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
-import 'package:minimalist_weather/provider/city.dart';
+import 'package:today/core/config/constants.dart';
+import 'package:today/provider/city.dart';
 
 class DailyDetailSection extends StatelessWidget {
   final City city;
@@ -32,18 +32,21 @@ class DailyDetailSection extends StatelessWidget {
             isMax: true,
             label1: "humidity",
             label2: "uv index",
-            value1: "${city.weather.currentHourlyWeatherData.relativeHumidity2m}%",
+            value1:
+                "${city.weather.currentHourlyWeatherData.relativeHumidity2m}%",
             value2: city.weather.dailyWeatherData.first.uvIndexMax.toString(),
           ),
-           _DetailSection(
+          _DetailSection(
             temperature: city
                 .weather.dailyWeatherData.first.apparentTemperatureMin
                 .toInt(),
             isMax: false,
             label1: "wind",
             label2: "pressure",
-            value1: "${city.weather.currentHourlyWeatherData.windSpeed10m} ${city.weather.currentHourlyWeatherData.windSpeed10mUnit}",
-            value2: "${city.weather.currentHourlyWeatherData.surfacePressure} ${city.weather.currentHourlyWeatherData.surfacePressureUnit}",
+            value1:
+                "${city.weather.currentHourlyWeatherData.windSpeed10m} ${city.weather.currentHourlyWeatherData.windSpeed10mUnit}",
+            value2:
+                "${city.weather.currentHourlyWeatherData.surfacePressure} ${city.weather.currentHourlyWeatherData.surfacePressureUnit}",
           ),
         ],
       ),

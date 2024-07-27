@@ -1,4 +1,4 @@
-package com.tom.minimalist_weather
+package com.tom.today
 
 import io.flutter.embedding.android.FlutterActivity
 

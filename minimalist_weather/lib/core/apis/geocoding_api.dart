@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:minimalist_weather/core/exeptions/api_exeptions.dart';
+import 'package:today/core/exeptions/api_exeptions.dart';
 import 'package:timezone/standalone.dart' as tz;
 
 abstract class GeocodingApi {
@@ -95,4 +95,3 @@ class GeoLocation {
   factory GeoLocation.fromJson(String source) =>
       GeoLocation.fromMap(json.decode(source));
 }
-

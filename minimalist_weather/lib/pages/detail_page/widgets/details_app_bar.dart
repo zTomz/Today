@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
-import 'package:minimalist_weather/core/services/vibration_service.dart';
-import 'package:minimalist_weather/provider/cities_provider.dart';
+import 'package:today/core/config/constants.dart';
+import 'package:today/core/services/vibration_service.dart';
+import 'package:today/provider/cities_provider.dart';
 
 class DetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
   const DetailsAppBar({

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
-import 'package:minimalist_weather/core/services/vibration_service.dart';
-import 'package:minimalist_weather/pages/cities_page/dialogs/new_city_dialog.dart';
-import 'package:minimalist_weather/pages/cities_page/widgets/city_list_tile.dart';
-import 'package:minimalist_weather/provider/cities_provider.dart';
-import 'package:minimalist_weather/widgets/custom_button.dart';
+import 'package:today/core/config/constants.dart';
+import 'package:today/core/services/vibration_service.dart';
+import 'package:today/pages/cities_page/dialogs/new_city_dialog.dart';
+import 'package:today/pages/cities_page/widgets/city_list_tile.dart';
+import 'package:today/provider/cities_provider.dart';
+import 'package:today/widgets/custom_button.dart';
 
 class CitiesListView extends HookConsumerWidget {
   const CitiesListView({super.key});

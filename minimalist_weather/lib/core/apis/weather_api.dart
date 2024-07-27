@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:minimalist_weather/core/exeptions/api_exeptions.dart';
-import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:today/core/exeptions/api_exeptions.dart';
+import 'package:today/core/config/constants.dart';
 import 'package:qweather_icons/qweather_icons.dart';
 
 abstract class WeatherApi {
