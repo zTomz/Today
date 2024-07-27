@@ -37,6 +37,7 @@ class BigWeatherSection extends StatelessWidget {
                   ),
             ),
           ),
+          const SizedBox(height: Spacing.small),
           SizedBox(
             height: 170,
             child: Hero(
@@ -48,13 +49,14 @@ class BigWeatherSection extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: MediaQuery.sizeOf(context).width * 0.5,
+                      height: 170,
                       child: FittedBox(
-                        fit: BoxFit.fitWidth,
+                        fit: BoxFit.contain,
                         child: Text(
                           "${city.weather.currentTemperature.toInt()}",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            height: 1,
+                            height: 0.9,
                             letterSpacing: -0.5,
                             color: Theme.of(context).colorScheme.onSurface,
                           ),

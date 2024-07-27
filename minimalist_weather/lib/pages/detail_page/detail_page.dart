@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/pages/detail_page/widgets/background_blob.dart';
+import 'package:minimalist_weather/widgets/background_blob.dart';
 import 'package:minimalist_weather/pages/detail_page/widgets/big_weather_section.dart';
 import 'package:minimalist_weather/pages/detail_page/widgets/daily_detail_section.dart';
 import 'package:minimalist_weather/pages/detail_page/widgets/details_app_bar.dart';
@@ -15,20 +15,27 @@ class DetailPage extends HookConsumerWidget {
     required this.cityUuid,
   });
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncCity = ref.watch(citiesProvider).whenData(
           (cities) => cities.firstWhere((city) => city.uuid == cityUuid),
         );
+    final screenSize = MediaQuery.sizeOf(context);
 
     return Scaffold(
       body: asyncCity.when(
         data: (city) => Stack(
           alignment: Alignment.topCenter,
           children: [
-            BackgroundBlob(
-              color: city.weather.currentHourlyWeatherData.weatherColor,
+            Positioned(
+              top: -screenSize.width * 0.9,
+              left: -screenSize.width / 2,
+              child: BackgroundBlob(
+                color: city.weather.currentHourlyWeatherData.weatherColor,
+                size: Size.square(
+                  screenSize.width * 2,
+                ),
+              ),
             ),
             Column(
               children: [

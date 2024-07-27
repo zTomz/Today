@@ -6,23 +6,23 @@ class BackgroundBlob extends StatelessWidget {
   /// The color of the background blob
   final Color color;
 
+  /// The size of the background blob
+  final Size size;
+
   const BackgroundBlob({
     super.key,
     required this.color,
+    required this.size,
   });
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.sizeOf(context);
-
-    return Positioned(
-      top: -screenSize.width * 0.9,
-      left: -screenSize.width / 2,
+    return ClipRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
-          width: screenSize.width * 2,
-          height: screenSize.width * 2,
+          width: size.width,
+          height: size.height,
           decoration: BoxDecoration(
             gradient: RadialGradient(
               colors: [
