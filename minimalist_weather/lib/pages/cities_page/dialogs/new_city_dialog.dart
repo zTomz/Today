@@ -3,6 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minimalist_weather/core/apis/geocoding_api.dart';
 import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:minimalist_weather/core/exeptions/cities_provider_exeptions.dart';
 import 'package:minimalist_weather/core/services/vibration_service.dart';
 import 'package:minimalist_weather/provider/cities_provider.dart';
 import 'package:minimalist_weather/widgets/custom_button.dart';
@@ -94,11 +95,20 @@ class NewCityDialog extends HookConsumerWidget {
                   }
 
                   // Add the city
-                  await ref
-                      .read<CitiesNotifier>(citiesProvider.notifier)
-                      .addCity(
-                        geoLocation.value!,
-                      );
+                  try {
+                    await ref
+                        .read<CitiesNotifier>(citiesProvider.notifier)
+                        .addCity(
+                          geoLocation.value!,
+                        );
+                  } on CityAlreadyExistsExeption {
+                    error.value =
+                        "${geoLocation.value?.name ?? "The city"}${geoLocation.value?.name != null ? ", " : ""}${geoLocation.value?.countryCode ?? ""} already exists";
+                    VibrationService().warning();
+                    return;
+                  } catch (e) {
+                    rethrow;
+                  }
 
                   VibrationService().success();
 

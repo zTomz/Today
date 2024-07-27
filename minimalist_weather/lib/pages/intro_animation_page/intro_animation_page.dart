@@ -18,7 +18,6 @@ class _IntroAnimationPageState extends State<IntroAnimationPage> {
   void initState() {
     super.initState();
 
-    // TODO: Start the timer
     startTimer();
   }
 

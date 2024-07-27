@@ -1,8 +1,5 @@
 // TODO: Write README
 // TODO: Write tests
-// TODO: Add haptic feedback
-// TODO: Add countdown text
-// FIXME: Intro animation
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
