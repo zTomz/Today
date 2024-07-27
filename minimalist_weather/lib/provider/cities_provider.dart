@@ -63,7 +63,9 @@ class CitiesNotifier extends AsyncNotifier<List<City>> {
 
     if (cities.any((element) => element.location.latitude == location.latitude && element.location.longitude == location.longitude)) {
       logger.e("The city ${location.name}, ${location.countryCode} already exists");
-      throw CityAlreadyExistsExeption();
+      throw CityAlreadyExistsExeption(
+        message: "The city ${location.name}, ${location.countryCode} already exists",
+      );
     }
 
     final prefsInstance = await SharedPreferences.getInstance();

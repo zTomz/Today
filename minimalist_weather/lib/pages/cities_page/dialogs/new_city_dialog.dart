@@ -101,9 +101,8 @@ class NewCityDialog extends HookConsumerWidget {
                         .addCity(
                           geoLocation.value!,
                         );
-                  } on CityAlreadyExistsExeption {
-                    error.value =
-                        "${geoLocation.value?.name ?? "The city"}${geoLocation.value?.name != null ? ", " : ""}${geoLocation.value?.countryCode ?? ""} already exists";
+                  } on CityAlreadyExistsExeption catch (e) {
+                    error.value = e.message;
                     VibrationService().warning();
                     return;
                   } catch (e) {
