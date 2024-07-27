@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:minimalist_weather/core/services/vibration_service.dart';
 import 'package:minimalist_weather/pages/cities_page/dialogs/new_city_dialog.dart';
 
 class CitiesAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -33,6 +34,7 @@ class CitiesAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             IconButton(
               onPressed: () async {
+                VibrationService().vibrate();
                 await showDialog(
                   context: context,
                   builder: (context) => const NewCityDialog(),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/apis/geocoding_api.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/apis/geocoding_api.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:minimalist_weather/core/services/vibration_service.dart';
 import 'package:minimalist_weather/provider/cities_provider.dart';
 import 'package:minimalist_weather/widgets/custom_button.dart';
 
@@ -87,6 +88,8 @@ class NewCityDialog extends HookConsumerWidget {
                   // Check the controller
                   if (geoLocation.value == null) {
                     error.value = "No city selected";
+                    VibrationService().warning();
+
                     return;
                   }
 
@@ -96,6 +99,8 @@ class NewCityDialog extends HookConsumerWidget {
                       .addCity(
                         geoLocation.value!,
                       );
+
+                  VibrationService().success();
 
                   // Close the dialog
                   if (context.mounted) {

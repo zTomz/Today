@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:minimalist_weather/core/services/vibration_service.dart';
 import 'package:minimalist_weather/pages/cities_page/dialogs/new_city_dialog.dart';
 import 'package:minimalist_weather/pages/cities_page/widgets/city_list_tile.dart';
 import 'package:minimalist_weather/provider/cities_provider.dart';
@@ -28,6 +29,7 @@ class CitiesListView extends HookConsumerWidget {
                 ),
                 icon: const Icon(Icons.add_rounded),
                 onPressed: () async {
+                  VibrationService().vibrate();
                   await showDialog(
                     context: context,
                     builder: (context) => const NewCityDialog(),

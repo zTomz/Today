@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:minimalist_weather/apis/api_exeptions.dart';
+import 'package:minimalist_weather/core/apis/api_exeptions.dart';
 import 'package:timezone/standalone.dart' as tz;
 
 abstract class GeocodingApi {

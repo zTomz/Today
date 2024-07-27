@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:minimalist_weather/core/services/vibration_service.dart';
 import 'package:minimalist_weather/pages/cities_page/cities_page.dart';
 
 class IntroAnimationPage extends StatefulWidget {
@@ -28,6 +29,7 @@ class _IntroAnimationPageState extends State<IntroAnimationPage> {
       setState(() {
         progress++;
       });
+      VibrationService().vibrate();
     }
 
     await Future.delayed(AnimationDurations.animationLong);

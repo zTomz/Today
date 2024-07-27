@@ -7,7 +7,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:minimalist_weather/core/services/vibration_service.dart';
 import 'package:minimalist_weather/pages/intro_animation_page/intro_animation_page.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
@@ -16,6 +17,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   tz.initializeTimeZones();
+
+  // Initialize the vibration service
+  await VibrationService().init();
 
   runApp(
     const ProviderScope(
@@ -31,7 +35,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Today',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
         textTheme: GoogleFonts.poppinsTextTheme().copyWith(

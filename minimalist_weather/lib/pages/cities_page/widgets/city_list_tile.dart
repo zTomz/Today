@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:minimalist_weather/core/services/vibration_service.dart';
 import 'package:minimalist_weather/pages/detail_page/detail_page.dart';
 import 'package:minimalist_weather/provider/cities_provider.dart';
 import 'package:minimalist_weather/provider/city.dart';
@@ -45,6 +46,8 @@ class CityListTile extends HookConsumerWidget {
           isTapDown.value = false;
         },
         onTapUp: (_) {
+          VibrationService().vibrate();
+
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => DetailPage(

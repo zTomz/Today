@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
 import 'package:minimalist_weather/provider/city.dart';
 
 class DailyDetailSection extends StatelessWidget {

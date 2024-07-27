@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
+import 'package:minimalist_weather/core/services/vibration_service.dart';
 import 'package:minimalist_weather/provider/cities_provider.dart';
 
 class DetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
@@ -31,6 +32,7 @@ class DetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
           children: [
             IconButton(
               onPressed: () {
+                VibrationService().vibrate();
                 Navigator.of(context).pop();
               },
               iconSize: 28,
@@ -41,7 +43,8 @@ class DetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
             const Spacer(),
             IconButton(
               onPressed: () async {
-                ref.read(citiesProvider.notifier).toggleUseCelcius(true);
+                VibrationService().selection();
+                await ref.read(citiesProvider.notifier).toggleUseCelcius(true);
               },
               icon: Text(
                 "°C",
@@ -54,7 +57,8 @@ class DetailsAppBar extends ConsumerWidget implements PreferredSizeWidget {
             ),
             IconButton(
               onPressed: () async {
-                ref.read(citiesProvider.notifier).toggleUseCelcius(false);
+                VibrationService().selection();
+                await ref.read(citiesProvider.notifier).toggleUseCelcius(false);
               },
               icon: Text(
                 "°F",

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/core/config/constants.dart';
 import 'package:minimalist_weather/provider/city.dart';
 
 class BigWeatherSection extends StatelessWidget {
@@ -46,13 +46,19 @@ class BigWeatherSection extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "${city.weather.currentTemperature.toInt()}",
-                      style: TextStyle(
-                        fontSize: 160,
-                        fontWeight: FontWeight.w600,
-                        height: 1,
-                        color: Theme.of(context).colorScheme.onSurface,
+                    SizedBox(
+                      width: MediaQuery.sizeOf(context).width * 0.5,
+                      child: FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          "${city.weather.currentTemperature.toInt()}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            height: 1,
+                            letterSpacing: -0.5,
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: Spacing.medium),
