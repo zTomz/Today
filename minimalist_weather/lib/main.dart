@@ -1,20 +1,17 @@
 // TODO: Write README
-// TODO: Write intro animation
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:minimalist_weather/config/constants.dart';
-import 'package:minimalist_weather/pages/cities_page/cities_page.dart';
+import 'package:minimalist_weather/pages/intro_animation_page/intro_animation_page.dart';
 
 import 'package:timezone/data/latest.dart' as tz;
-import 'package:visibility_detector/visibility_detector.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   tz.initializeTimeZones();
-  VisibilityDetectorController.instance.updateInterval = Duration.zero;
 
   runApp(
     const ProviderScope(
@@ -46,7 +43,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const CitiesPage(),
+      home: const IntroAnimationPage(),
     );
   }
 }

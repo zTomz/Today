@@ -24,9 +24,12 @@ class CitiesAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              "today",
-              style: Theme.of(context).textTheme.displayLarge,
+            Hero(
+              tag: 'app_title',
+              child: Text(
+                "today",
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
             ),
             IconButton(
               onPressed: () async {

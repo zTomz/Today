@@ -1,77 +1,118 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:minimalist_weather/config/constants.dart';
+import 'package:minimalist_weather/pages/cities_page/cities_page.dart';
 
-class IntroAnimationPage extends HookWidget {
+class IntroAnimationPage extends StatefulWidget {
   const IntroAnimationPage({super.key});
 
   @override
+  State<IntroAnimationPage> createState() => _IntroAnimationPageState();
+}
+
+class _IntroAnimationPageState extends State<IntroAnimationPage> {
+  int progress = 0;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // TODO: Start the timer
+    startTimer();
+  }
+
+  Future<void> startTimer() async {
+    while (progress < 6) {
+      await Future.delayed(AnimationDurations.animationLong);
+
+      setState(() {
+        progress++;
+      });
+    }
+
+    await Future.delayed(AnimationDurations.animationLong);
+
+    if (mounted) {
+      logger.i("Navigating to CitiesPage...");
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const CitiesPage(),
+        ),
+      );
+    } else {
+      logger.e("Failed to navigate to CitiesPage. The context is not mounted.");
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final wordProgress = useState<int>(1);
-
-    // FIXME: Timer doesnt work
-    // final _ = Timer.periodic(
-    //   AnimationDurations.animationLong,
-    //   (timer) {
-    //     wordProgress.value += 1;
-
-    //     if (wordProgress.value > 6) {
-    //       timer.cancel();
-    //       logger.i("Timer cancelled");
-    //       Navigator.of(context).push(
-    //         MaterialPageRoute(
-    //           builder: (context) {
-    //             return const CitiesPage();
-    //           },
-    //         ),
-    //       );
-    //     }
-    //   },
-    // );
-
-    final screenSize = MediaQuery.sizeOf(context);
-
     return Scaffold(
-      body: Center(
-        child: SizedBox(
-          width: screenSize.width - Spacing.extraLarge,
-          child: RichText(
-            textAlign: TextAlign.left,
-            text: TextSpan(
-              style: Theme.of(context).textTheme.displayMedium!.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: Theme.of(context).colorScheme.outlineVariant,
-                  ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          return AnimatedScale(
+            duration: AnimationDurations.animation,
+            scale: (constraints.maxWidth - Spacing.large) /
+                MediaQuery.sizeOf(context).width,
+            child: Row(
               children: [
-                if (wordProgress.value >= 1)
-                  const TextSpan(
-                    text: "What ",
-                  ),
-                if (wordProgress.value >= 2)
-                  const TextSpan(
-                    text: "is\n",
-                  ),
-                if (wordProgress.value >= 3)
-                  const TextSpan(
-                    text: "the ",
-                  ),
-                if (wordProgress.value >= 4)
-                  const TextSpan(
-                    text: "weather ",
-                  ),
-                if (wordProgress.value >= 5)
-                  const TextSpan(
-                    text: "like\n",
-                  ),
-                if (wordProgress.value >= 6)
-                  TextSpan(
-                    text: "today?",
-                    style: Theme.of(context).textTheme.displayLarge,
-                  ),
+                const SizedBox(width: Spacing.large),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        _FadeInText(isVisible: progress >= 1, text: "What "),
+                        _FadeInText(isVisible: progress >= 2, text: "is"),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        _FadeInText(isVisible: progress >= 3, text: "the "),
+                        _FadeInText(isVisible: progress >= 4, text: "weather "),
+                        _FadeInText(isVisible: progress >= 5, text: "like"),
+                      ],
+                    ),
+                    Hero(
+                      tag: 'app_title',
+                      child: _FadeInText(
+                        isVisible: progress >= 6,
+                        text: "today?",
+                        style: Theme.of(context).textTheme.displayLarge,
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-          ),
-        ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _FadeInText extends StatelessWidget {
+  final bool isVisible;
+  final String text;
+  final TextStyle? style;
+
+  const _FadeInText({
+    required this.isVisible,
+    required this.text,
+    this.style,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: isVisible ? 1.0 : 0.0,
+      duration: AnimationDurations.animation,
+      child: Text(
+        text,
+        style: style ??
+            Theme.of(context).textTheme.displayMedium!.copyWith(
+                  color: Theme.of(context).colorScheme.outline,
+                ),
       ),
     );
   }
