@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:minimalist_weather/config/constants.dart';
 import 'package:minimalist_weather/pages/cities_page/cities_page.dart';
@@ -22,7 +23,7 @@ class _IntroAnimationPageState extends State<IntroAnimationPage> {
 
   Future<void> startTimer() async {
     while (progress < 6) {
-      await Future.delayed(AnimationDurations.animationLong);
+      await Future.delayed(AnimationDurations.delay);
 
       setState(() {
         progress++;
@@ -33,11 +34,22 @@ class _IntroAnimationPageState extends State<IntroAnimationPage> {
 
     if (mounted) {
       logger.i("Navigating to CitiesPage...");
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const CitiesPage(),
-        ),
-      );
+
+      // If in debug mode, do not replace the route. So the developer can go
+      // back to the intro page.
+      if (kDebugMode) {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (context) => const CitiesPage(),
+          ),
+        );
+      } else {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const CitiesPage(),
+          ),
+        );
+      }
     } else {
       logger.e("Failed to navigate to CitiesPage. The context is not mounted.");
     }
@@ -46,46 +58,35 @@ class _IntroAnimationPageState extends State<IntroAnimationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return AnimatedScale(
-            duration: AnimationDurations.animation,
-            scale: (constraints.maxWidth - Spacing.large) /
-                MediaQuery.sizeOf(context).width,
-            child: Row(
+      body: Padding(
+        padding: const EdgeInsets.all(Spacing.large),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
               children: [
-                const SizedBox(width: Spacing.large),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        _FadeInText(isVisible: progress >= 1, text: "What "),
-                        _FadeInText(isVisible: progress >= 2, text: "is"),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        _FadeInText(isVisible: progress >= 3, text: "the "),
-                        _FadeInText(isVisible: progress >= 4, text: "weather "),
-                        _FadeInText(isVisible: progress >= 5, text: "like"),
-                      ],
-                    ),
-                    Hero(
-                      tag: 'app_title',
-                      child: _FadeInText(
-                        isVisible: progress >= 6,
-                        text: "today?",
-                        style: Theme.of(context).textTheme.displayLarge,
-                      ),
-                    ),
-                  ],
-                ),
+                _FadeInText(isVisible: progress >= 1, text: "What "),
+                _FadeInText(isVisible: progress >= 2, text: "is"),
               ],
             ),
-          );
-        },
+            Row(
+              children: [
+                _FadeInText(isVisible: progress >= 3, text: "the "),
+                _FadeInText(isVisible: progress >= 4, text: "weather "),
+                _FadeInText(isVisible: progress >= 5, text: "like"),
+              ],
+            ),
+            Hero(
+              tag: 'app_title',
+              child: _FadeInText(
+                isVisible: progress >= 6,
+                text: "today?",
+                style: Theme.of(context).textTheme.displayLarge,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -110,8 +111,8 @@ class _FadeInText extends StatelessWidget {
       child: Text(
         text,
         style: style ??
-            Theme.of(context).textTheme.displayMedium!.copyWith(
-                  color: Theme.of(context).colorScheme.outline,
+            Theme.of(context).textTheme.displaySmall!.copyWith(
+                  color: Theme.of(context).colorScheme.outlineVariant,
                 ),
       ),
     );
