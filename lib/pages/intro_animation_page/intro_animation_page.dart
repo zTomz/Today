@@ -25,6 +25,8 @@ class _IntroAnimationPageState extends State<IntroAnimationPage> {
     while (progress < 6) {
       await Future.delayed(AnimationDurations.delay);
 
+      if (!mounted) return;
+
       setState(() {
         progress++;
       });

@@ -26,8 +26,8 @@ class BackgroundBlob extends StatelessWidget {
           gradient: RadialGradient(
             colors: [
               color,
-              color.withOpacity(0.85),
-              color.withOpacity(0.7),
+              color.withValues(alpha: 0.85),
+              color.withValues(alpha: 0.7),
               Theme.of(context).colorScheme.surface,
             ],
             stops: const [

@@ -54,7 +54,7 @@ class DetailPage extends HookConsumerWidget {
             ),
           ],
         ),
-        error: (_, __) => const Center(
+        error: (_, _) => const Center(
           child: Text(
             "Failed to load weather data",
           ),
